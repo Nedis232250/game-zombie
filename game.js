@@ -135,6 +135,27 @@ canvas.addEventListener("mousemove", function(event) {
     }
 });
 
+document.addEventListener("keydown", function (event) {
+    switch (event.code) {
+        case "KeyW":
+	    cpz += Math.cos(cay * Math.PI / 180) * speed;
+	    cpx -= Math.sin(cay * Math.PI / 180) * speed;
+	break;
+	case "KeyS":
+	    cpz -= Math.cos(cay * Math.PI / 180) * speed;
+	    cpx += Math.sin(cay * Math.PI / 180) * speed;
+	break;
+	case "KeyA":
+	    cpx -= Math.cos(cay * Math.PI / 180) * speed;
+	    cpz -= Math.sin(cay * Math.PI / 180) * speed;
+	break;
+	case "KeyD":
+	    cpx += Math.cos(cay * Math.PI / 180) * speed;
+	    cpz += Math.sin(cay * Math.PI / 180) * speed;
+	break;
+    }
+});
+
 gl.useProgram(prog);
 
 function loop() {
