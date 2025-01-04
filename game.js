@@ -5,6 +5,7 @@ let cpx = 0.0;
 let cpy = 0.0;
 let cpz = -1.0;
 const sensitivity = 0.15;
+const speed = 0.05;
 
 const canvas = document.getElementById("game-surface");
 canvas.width = window.innerWidth;
@@ -131,6 +132,27 @@ canvas.addEventListener("mousemove", function(event) {
         cax = 89.9;
     } else if (cax <= -90) {
         cax = -89.9;
+    }
+});
+
+document.addEventListener("keydown", function(event) {
+    switch(event.code) {
+        case "KeyW":
+            cpx += Math.sin(cay * (Math.PI / 180)) * speed;
+            cpz += Math.cos(cay * (Math.PI / 180)) * speed;
+        break;
+        case "KeyS":
+            cpx -= Math.sin(cay * (Math.PI / 180)) * speed;
+            cpz -= Math.cos(cay * (Math.PI / 180)) * speed;
+        break;
+        case "KeyA":
+            cpx -= Math.cos(cay * (Math.PI / 180)) * speed;
+            cpz += Math.sin(cay * (Math.PI / 180)) * speed;
+        break;
+        case "KeyD": 
+            cpx += Math.cos(cay * (Math.PI / 180)) * speed;
+            cpz -= Math.sin(cay * (Math.PI / 180)) * speed;
+        break;
     }
 });
 
