@@ -1,3 +1,11 @@
+let cax = 0.0;
+let cay = 0.0;
+let caz = 0.0;
+let cpx = 0.0;
+let cpy = 0.0;
+let cpz = -1.0;
+const sensitivity = 0.15;
+
 const canvas = document.getElementById("game-surface");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -14,7 +22,7 @@ if (!gl) {
 }
 
 const vssrc = `
-precision highp float;
+precision lowp float;
 
 attribute vec3 vpos;
 attribute vec3 vcolor;
@@ -50,7 +58,7 @@ void main() {
 `;
 
 const fssrc = `
-precision highp float;
+precision lowp float;
 
 varying vec3 vcolor_trans;
 
@@ -107,9 +115,34 @@ gl.vertexAttribPointer(gl.getAttribLocation(prog, "vcolor"), 3, gl.FLOAT, false,
 gl.enableVertexAttribArray(gl.getAttribLocation(prog, "vpos"));
 gl.enableVertexAttribArray(gl.getAttribLocation(prog, "vcolor"));
 
+canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock; 
+canvas.onclick = function() {
+    canvas.requestPointerLock();
+};
+
+canvas.addEventListener("mousemove", function(event) {
+    const deltaX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+    const deltaY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+    
+    cay -= deltaX * sensitivity;
+    cax -= deltaY * sensitivity;
+
+    if (cax >= 90) {
+        cax = 89.9;
+    } else if (cax <= -90) {
+        cax = -89.9;
+    }
+});
+
 gl.useProgram(prog);
 
-gl.uniform3fv(gl.getUniformLocation(prog, "c_ang"), [0.0, 0.0, 0.0]);
-gl.uniform3fv(gl.getUniformLocation(prog, "c_pos"), [0.0, 0.0, -1.0]);
+function loop() {
+    gl.uniform3fv(gl.getUniformLocation(prog, "c_ang"), [cax, cay, caz]);
+    gl.uniform3fv(gl.getUniformLocation(prog, "c_pos"), [cpx, cpy, cpz]);
+    
+    gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+    
+    requestAnimationFrame(loop);
+}
 
-gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+requestAnimationFrame(loop);
