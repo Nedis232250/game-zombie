@@ -8,7 +8,9 @@ let t_cpx = cpx;
 let t_cpz = cpz;
 const sensitivity = 0.15;
 const speed = 0.05;
-const smoothFactor = 0.1; // Adjust this value to control smoothness
+const smoothFactor = 0.1;
+
+const keysPressed = {};
 
 const canvas = document.getElementById("game-surface");
 canvas.width = window.innerWidth;
@@ -139,29 +141,33 @@ canvas.addEventListener("mousemove", function(event) {
 });
 
 document.addEventListener("keydown", function (event) {
-    switch (event.code) {
-        case "KeyW":
-        t_cpz += Math.cos(cay * Math.PI / 180) * speed;
-        t_cpx -= Math.sin(cay * Math.PI / 180) * speed;
-    break;
-    case "KeyS":
-        t_cpz -= Math.cos(cay * Math.PI / 180) * speed;
-        t_cpx += Math.sin(cay * Math.PI / 180) * speed;
-    break;
-    case "KeyA":
-        t_cpx -= Math.cos(cay * Math.PI / 180) * speed;
-        t_cpz -= Math.sin(cay * Math.PI / 180) * speed;
-    break;
-    case "KeyD":
-        t_cpx += Math.cos(cay * Math.PI / 180) * speed;
-        t_cpz += Math.sin(cay * Math.PI / 180) * speed;
-    break;
-    }
+    keysPressed[event.code] = true;
+});
+
+document.addEventListener("keyup", function (event) {
+    keysPressed[event.code] = false;
 });
 
 gl.useProgram(prog);
 
 function loop() {
+    if (keysPressed["KeyW"]) {
+        t_cpz += Math.cos(cay * Math.PI / 180) * speed;
+        t_cpx -= Math.sin(cay * Math.PI / 180) * speed;
+    }
+    if (keysPressed["KeyS"]) {
+        t_cpz -= Math.cos(cay * Math.PI / 180) * speed;
+        t_cpx += Math.sin(cay * Math.PI / 180) * speed;
+    }
+    if (keysPressed["KeyA"]) {
+        t_cpx -= Math.cos(cay * Math.PI / 180) * speed;
+        t_cpz -= Math.sin(cay * Math.PI / 180) * speed;
+    }
+    if (keysPressed["KeyD"]) {
+        t_cpx += Math.cos(cay * Math.PI / 180) * speed;
+        t_cpz += Math.sin(cay * Math.PI / 180) * speed;
+    }
+
     cpx += (t_cpx - cpx) * smoothFactor;
     cpz += (t_cpz - cpz) * smoothFactor;
 
