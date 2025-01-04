@@ -1,4 +1,7 @@
 const canvas = document.getElementById("game-surface");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
 let gl = canvas.getContext("webgl");
 
 if (!gl) {
