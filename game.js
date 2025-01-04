@@ -20,8 +20,31 @@ attribute vec3 vpos;
 attribute vec3 vcolor;
 varying vec3 vcolor_trans;
 
+uniform vec3 c_ang;
+uniform vec3 c_pos;
+
 void main() {
-    gl_Position = vec4(vpos, 1.0);
+    mat3 xrot = mat3(
+        vec3(1.0, 0.0, 0.0),
+        vec3(0.0, cos(radians(c_ang.x)), -sin(radians(c_ang.x))),
+        vec3(0.0, sin(radians(c_ang.x)), cos(radians(c_ang.x)))
+    );
+    
+    mat3 yrot = mat3(
+        vec3(cos(radians(c_ang.y)), 0.0, sin(radians(c_ang.y))),
+        vec3(0.0, 1.0, 0.0),
+        vec3(-sin(radians(c_ang.y)), 0.0, cos(radians(c_ang.y)))
+    );
+    
+    mat3 zrot = mat3(
+        vec3(cos(radians(c_ang.z)), -sin(radians(c_ang.z)), 0.0),
+        vec3(sin(radians(c_ang.z)), cos(radians(c_ang.z)), 0.0),
+        vec3(0.0, 0.0, 1.0)
+    );
+
+    vec3 vpos_m = (vpos - c_pos) * xrot * yrot * zrot;
+    
+    gl_Position = vec4(vpos_m.xy, 0.0, vpos_m.z);
     vcolor_trans = vcolor;
 }
 `;
@@ -85,4 +108,8 @@ gl.enableVertexAttribArray(gl.getAttribLocation(prog, "vpos"));
 gl.enableVertexAttribArray(gl.getAttribLocation(prog, "vcolor"));
 
 gl.useProgram(prog);
-gl.drawArrays(gl.TRIANGLES, 0, indices.length);
+
+gl.uniform3fv(gl.getUniformLocation(prog, "c_ang"), [0.0, 0.0, 0.0]);
+gl.uniform3fv(gl.getUniformLocation(prog, "c_pos"), [0.0, 0.0, -1.0]);
+
+gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
