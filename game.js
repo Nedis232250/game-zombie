@@ -121,6 +121,10 @@ canvas.onclick = function() {
     canvas.requestPointerLock();
 };
 
+function radians(degrees) {
+    return degrees * Math.PI / 180;
+}
+
 canvas.addEventListener("mousemove", function(event) {
     const deltaX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
     const deltaY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
@@ -132,27 +136,6 @@ canvas.addEventListener("mousemove", function(event) {
         cax = 89.9;
     } else if (cax <= -90) {
         cax = -89.9;
-    }
-});
-
-document.addEventListener("keydown", function(event) {
-    switch(event.code) {
-        case "KeyW":
-            cpx += Math.sin(cay * (Math.PI / 180)) * speed;
-            cpz += Math.cos(cay * (Math.PI / 180)) * speed;
-        break;
-        case "KeyS":
-            cpx -= Math.sin(cay * (Math.PI / 180)) * speed;
-            cpz -= Math.cos(cay * (Math.PI / 180)) * speed;
-        break;
-        case "KeyA":
-            cpx -= Math.cos(cay * (Math.PI / 180)) * speed;
-            cpz += Math.sin(cay * (Math.PI / 180)) * speed;
-        break;
-        case "KeyD": 
-            cpx += Math.cos(cay * (Math.PI / 180)) * speed;
-            cpz -= Math.sin(cay * (Math.PI / 180)) * speed;
-        break;
     }
 });
 
