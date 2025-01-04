@@ -121,10 +121,6 @@ canvas.onclick = function() {
     canvas.requestPointerLock();
 };
 
-function radians(degrees) {
-    return degrees * Math.PI / 180;
-}
-
 canvas.addEventListener("mousemove", function(event) {
     const deltaX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
     const deltaY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
@@ -138,10 +134,6 @@ canvas.addEventListener("mousemove", function(event) {
         cax = -89.9;
     }
 });
-
-function radians(degrees) {
-    return degrees * Math.PI / 180;
-}
 
 gl.useProgram(prog);
 
