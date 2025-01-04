@@ -139,6 +139,10 @@ canvas.addEventListener("mousemove", function(event) {
     }
 });
 
+function radians(degrees) {
+    return degrees * Math.PI / 180;
+}
+
 gl.useProgram(prog);
 
 function loop() {
