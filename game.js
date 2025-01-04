@@ -4,8 +4,11 @@ let caz = 0.0;
 let cpx = 0.0;
 let cpy = 0.0;
 let cpz = -1.0;
+let t_cpx = cpx;
+let t_cpz = cpz;
 const sensitivity = 0.15;
 const speed = 0.05;
+const smoothFactor = 0.1; // Adjust this value to control smoothness
 
 const canvas = document.getElementById("game-surface");
 canvas.width = window.innerWidth;
@@ -138,27 +141,30 @@ canvas.addEventListener("mousemove", function(event) {
 document.addEventListener("keydown", function (event) {
     switch (event.code) {
         case "KeyW":
-	    cpz += Math.cos(cay * Math.PI / 180) * speed;
-	    cpx -= Math.sin(cay * Math.PI / 180) * speed;
-	break;
-	case "KeyS":
-	    cpz -= Math.cos(cay * Math.PI / 180) * speed;
-	    cpx += Math.sin(cay * Math.PI / 180) * speed;
-	break;
-	case "KeyA":
-	    cpx -= Math.cos(cay * Math.PI / 180) * speed;
-	    cpz -= Math.sin(cay * Math.PI / 180) * speed;
-	break;
-	case "KeyD":
-	    cpx += Math.cos(cay * Math.PI / 180) * speed;
-	    cpz += Math.sin(cay * Math.PI / 180) * speed;
-	break;
+        t_cpz += Math.cos(cay * Math.PI / 180) * speed;
+        t_cpx -= Math.sin(cay * Math.PI / 180) * speed;
+    break;
+    case "KeyS":
+        t_cpz -= Math.cos(cay * Math.PI / 180) * speed;
+        t_cpx += Math.sin(cay * Math.PI / 180) * speed;
+    break;
+    case "KeyA":
+        t_cpx -= Math.cos(cay * Math.PI / 180) * speed;
+        t_cpz -= Math.sin(cay * Math.PI / 180) * speed;
+    break;
+    case "KeyD":
+        t_cpx += Math.cos(cay * Math.PI / 180) * speed;
+        t_cpz += Math.sin(cay * Math.PI / 180) * speed;
+    break;
     }
 });
 
 gl.useProgram(prog);
 
 function loop() {
+    cpx += (t_cpx - cpx) * smoothFactor;
+    cpz += (t_cpz - cpz) * smoothFactor;
+
     gl.uniform3fv(gl.getUniformLocation(prog, "c_ang"), [cax, cay, caz]);
     gl.uniform3fv(gl.getUniformLocation(prog, "c_pos"), [cpx, cpy, cpz]);
     
