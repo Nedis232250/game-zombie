@@ -30,3 +30,5 @@ class Cone {
         return [vertices, indices];
     }
 };
+
+export { Cone, radians };
