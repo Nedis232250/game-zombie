@@ -24,7 +24,7 @@ if (!gl) {
 }
 
 if (!gl) {
-    console.warn("Your browser does not support WebGL or experimental WebGL. Please switch to a browser that supports wither of those");
+    console.warn("Your browser does not support WebGL or experimental WebGL. Please switch to a browser that supports either of those");
 }
 
 const vssrc = `
